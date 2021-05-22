@@ -133,7 +133,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         child: InkWell(
                           onTap: () async {
-                            final chatsRecordData = createChatsRecordData();
+                            final chatUser = listViewUsersRecord.displayName;
+                            final chatEmail = listViewUsersRecord.email;
+                            final chatID = listViewUsersRecord.uid;
+                            final activeUser = listViewUsersRecord.reference;
+
+                            final chatsRecordData = createChatsRecordData(
+                              chatUser: chatUser,
+                              chatEmail: chatEmail,
+                              chatID: chatID,
+                              activeUser: activeUser,
+                            );
 
                             await ChatsRecord.collection
                                 .doc()

@@ -18,7 +18,10 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
   String get chatEmail;
 
   @nullable
-  double get chatID;
+  String get chatID;
+
+  @nullable
+  DocumentReference get activeUser;
 
   @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
@@ -27,7 +30,7 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
   static void _initializeBuilder(ChatsRecordBuilder builder) => builder
     ..chatUser = ''
     ..chatEmail = ''
-    ..chatID = 0.0;
+    ..chatID = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('chats');
@@ -44,20 +47,22 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
 Map<String, dynamic> createChatsRecordData({
   String chatUser,
   String chatEmail,
-  double chatID,
+  String chatID,
+  DocumentReference activeUser,
 }) =>
     serializers.serializeWith(
         ChatsRecord.serializer,
         ChatsRecord((c) => c
           ..chatUser = chatUser
           ..chatEmail = chatEmail
-          ..chatID = chatID));
+          ..chatID = chatID
+          ..activeUser = activeUser));
 
 ChatsRecord get dummyChatsRecord {
   final builder = ChatsRecordBuilder()
     ..chatUser = dummyString
     ..chatEmail = dummyString
-    ..chatID = dummyDouble;
+    ..chatID = dummyString;
   return builder.build();
 }
 
