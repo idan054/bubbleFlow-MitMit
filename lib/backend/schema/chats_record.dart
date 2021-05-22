@@ -21,16 +21,12 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
   DocumentReference get activeUser;
 
   @nullable
-  String get chatIDx;
-
-  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(ChatsRecordBuilder builder) => builder
     ..chatUser = ''
-    ..chatEmail = ''
-    ..chatIDx = '';
+    ..chatEmail = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('chats');
@@ -48,21 +44,18 @@ Map<String, dynamic> createChatsRecordData({
   String chatUser,
   String chatEmail,
   DocumentReference activeUser,
-  String chatIDx,
 }) =>
     serializers.serializeWith(
         ChatsRecord.serializer,
         ChatsRecord((c) => c
           ..chatUser = chatUser
           ..chatEmail = chatEmail
-          ..activeUser = activeUser
-          ..chatIDx = chatIDx));
+          ..activeUser = activeUser));
 
 ChatsRecord get dummyChatsRecord {
   final builder = ChatsRecordBuilder()
     ..chatUser = dummyString
-    ..chatEmail = dummyString
-    ..chatIDx = dummyString;
+    ..chatEmail = dummyString;
   return builder.build();
 }
 
