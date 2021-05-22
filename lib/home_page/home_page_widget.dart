@@ -135,12 +135,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           onTap: () async {
                             final chatUser = listViewUsersRecord.displayName;
                             final chatEmail = listViewUsersRecord.email;
-                            final activeUser = listViewUsersRecord.reference;
 
                             final chatsRecordData = createChatsRecordData(
                               chatUser: chatUser,
                               chatEmail: chatEmail,
-                              activeUser: activeUser,
                             );
 
                             await ChatsRecord.collection
