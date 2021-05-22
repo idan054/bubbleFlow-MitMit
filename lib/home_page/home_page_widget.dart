@@ -1,6 +1,8 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -129,19 +131,28 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           listViewUsersRecordList[listViewIndex];
                       return Padding(
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Color(0xFFF5F5F5),
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                            child: Text(
-                              listViewUsersRecord.email,
-                              style: FlutterFlowTheme.bodyText1.override(
-                                fontFamily: 'Poppins',
+                        child: InkWell(
+                          onTap: () async {
+                            final chatsRecordData = createChatsRecordData();
+
+                            await ChatsRecord.collection
+                                .doc()
+                                .set(chatsRecordData);
+                          },
+                          child: Card(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            color: Color(0xFFF5F5F5),
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                              child: Text(
+                                listViewUsersRecord.email,
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
                               ),
                             ),
                           ),
