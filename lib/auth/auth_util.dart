@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_user_provider.dart';
 
 export 'anonymous_auth.dart';
@@ -14,6 +16,7 @@ Future<User> signInOrCreateAccount(
     BuildContext context, Future<UserCredential> Function() signInFunc) async {
   try {
     final userCredential = await signInFunc();
+    await maybeCreateUser(userCredential.user);
     return userCredential.user;
   } on FirebaseAuthException catch (e) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -48,3 +51,7 @@ String get currentUserUid => currentUser?.user?.uid ?? '';
 String get currentUserDisplayName => currentUser?.user?.displayName ?? '';
 
 String get currentUserPhoto => currentUser?.user?.photoURL ?? '';
+
+DocumentReference get currentUserReference => currentUser?.user != null
+    ? UsersRecord.collection.doc(currentUser.user.uid)
+    : null;
