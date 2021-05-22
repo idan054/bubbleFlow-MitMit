@@ -64,29 +64,33 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     ),
                   ),
                   Expanded(
-                    child: StreamBuilder<List<MassagesRecord>>(
-                      stream: queryMassagesRecord(),
+                    child: StreamBuilder<List<ChatsRecord>>(
+                      stream: queryChatsRecord(
+                        queryBuilder: (chatsRecord) => chatsRecord.where(
+                            'activeChat',
+                            isEqualTo: currentUserReference),
+                      ),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
                         }
-                        List<MassagesRecord> listViewMassagesRecordList =
+                        List<ChatsRecord> listViewChatsRecordList =
                             snapshot.data;
                         // Customize what your widget looks like with no query results.
                         if (snapshot.data.isEmpty) {
                           // return Container();
                           // For now, we'll just include some dummy data.
-                          listViewMassagesRecordList =
-                              createDummyMassagesRecord(count: 4);
+                          listViewChatsRecordList =
+                              createDummyChatsRecord(count: 4);
                         }
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           scrollDirection: Axis.vertical,
-                          itemCount: listViewMassagesRecordList.length,
+                          itemCount: listViewChatsRecordList.length,
                           itemBuilder: (context, listViewIndex) {
-                            final listViewMassagesRecord =
-                                listViewMassagesRecordList[listViewIndex];
+                            final listViewChatsRecord =
+                                listViewChatsRecordList[listViewIndex];
                             return Card(
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               color: Color(0xFFF5F5F5),
@@ -97,8 +101,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Text(
-                                      listViewMassagesRecord.sentTime
-                                          .toString(),
+                                      listViewChatsRecord.fromMsgs,
                                       style:
                                           FlutterFlowTheme.bodyText1.override(
                                         fontFamily: 'Poppins',
@@ -107,7 +110,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                       child: Text(
-                                        listViewMassagesRecord.massageValue,
+                                        listViewIndex.toString(),
                                         style:
                                             FlutterFlowTheme.bodyText1.override(
                                           fontFamily: 'Poppins',
@@ -117,7 +120,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                       child: Text(
-                                        listViewIndex.toString(),
+                                        listViewChatsRecord.chatEmail,
                                         style:
                                             FlutterFlowTheme.bodyText1.override(
                                           fontFamily: 'Poppins',
