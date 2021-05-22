@@ -6,10 +6,12 @@ import '../flutter_flow/flutter_flow_util.dart';
 
 import 'schema/users_record.dart';
 import 'schema/chats_record.dart';
+import 'schema/massages_record.dart';
 import 'schema/serializers.dart';
 
 export 'schema/users_record.dart';
 export 'schema/chats_record.dart';
+export 'schema/massages_record.dart';
 
 Stream<List<UsersRecord>> queryUsersRecord(
         {Query Function(Query) queryBuilder,
@@ -23,6 +25,13 @@ Stream<List<ChatsRecord>> queryChatsRecord(
         int limit = -1,
         bool singleRecord = false}) =>
     queryCollection(ChatsRecord.collection, ChatsRecord.serializer,
+        queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
+
+Stream<List<MassagesRecord>> queryMassagesRecord(
+        {Query Function(Query) queryBuilder,
+        int limit = -1,
+        bool singleRecord = false}) =>
+    queryCollection(MassagesRecord.collection, MassagesRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
 Stream<List<T>> queryCollection<T>(

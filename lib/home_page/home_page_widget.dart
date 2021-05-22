@@ -137,7 +137,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             final chatUser = listViewUsersRecord.displayName;
                             final chatEmail = listViewUsersRecord.email;
                             final chatID = listViewUsersRecord.uid;
-                            final activeChat = listViewUsersRecord.reference;
+                            final activeChat = currentUserReference;
 
                             final chatsRecordData = createChatsRecordData(
                               chatUser: chatUser,

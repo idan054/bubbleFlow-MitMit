@@ -1,5 +1,8 @@
+import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,7 +14,14 @@ class ChatPageWidget extends StatefulWidget {
 }
 
 class _ChatPageWidgetState extends State<ChatPageWidget> {
+  TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +74,77 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     style: FlutterFlowTheme.bodyText1.override(
                       fontFamily: 'Poppins',
                     ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: TextFormField(
+                            controller: textController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'msg to firebase',
+                              hintStyle: FlutterFlowTheme.bodyText1.override(
+                                fontFamily: 'Poppins',
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          final activeUser = chatPageChatsRecord.activeChat;
+                          final guestUser = chatPageChatsRecord.reference;
+                          final massageValue = textController.text;
+                          final sentTime = getCurrentTimestamp;
+
+                          final massagesRecordData = {
+                            ...createMassagesRecordData(
+                              activeUser: activeUser,
+                              guestUser: guestUser,
+                              massageValue: massageValue,
+                              sentTime: sentTime,
+                            ),
+                            'message_id': FieldValue.arrayUnion([100]),
+                          };
+
+                          await MassagesRecord.collection
+                              .doc()
+                              .set(massagesRecordData);
+                        },
+                        icon: Icon(
+                          Icons.send,
+                          color: Colors.black,
+                          size: 30,
+                        ),
+                        iconSize: 30,
+                      )
+                    ],
                   )
                 ],
               ),
