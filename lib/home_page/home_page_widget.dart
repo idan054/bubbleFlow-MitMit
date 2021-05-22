@@ -1,3 +1,4 @@
+import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +21,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         child: Align(
           alignment: Alignment(0, 0.05),
           child: Text(
-            'Hello World',
+            currentUserEmail,
             style: FlutterFlowTheme.bodyText1.override(
               fontFamily: 'Poppins',
             ),
