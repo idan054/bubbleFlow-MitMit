@@ -21,6 +21,9 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
   String get chatID;
 
   @nullable
+  DocumentReference get activeChat;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -45,13 +48,15 @@ Map<String, dynamic> createChatsRecordData({
   String chatUser,
   String chatEmail,
   String chatID,
+  DocumentReference activeChat,
 }) =>
     serializers.serializeWith(
         ChatsRecord.serializer,
         ChatsRecord((c) => c
           ..chatUser = chatUser
           ..chatEmail = chatEmail
-          ..chatID = chatID));
+          ..chatID = chatID
+          ..activeChat = activeChat));
 
 ChatsRecord get dummyChatsRecord {
   final builder = ChatsRecordBuilder()
