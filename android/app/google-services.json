@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "835874279065",
+    "project_id": "bubbleflow-mitmit",
+    "storage_bucket": "bubbleflow-mitmit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835874279065:android:48435dd5eeb9dda01c7208",
+        "android_client_info": {
+          "package_name": "com.biton.bubbleflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835874279065-f1hk6qam7k550tvmp3ivqvspujmlm83q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biton.bubbleflow",
+            "certificate_hash": "b4b168025d2efb5643ade6851f82ebcc86bc5ae3"
+          }
+        },
+        {
+          "client_id": "835874279065-ui6s9abpqqijvkmmv2458081mo8g3n2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9RKQyUml_EUtZ377HEEf7qD8us5Upv8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "835874279065-ui6s9abpqqijvkmmv2458081mo8g3n2e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "835874279065-2thpeibiu90s8lns9u8e75ka29veuoh7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.biton.bubbleflow"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
