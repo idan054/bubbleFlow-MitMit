@@ -32,12 +32,17 @@ abstract class MassagesRecord
   BuiltList<int> get messageId;
 
   @nullable
+  @BuiltValueField(wireName: 'from_messges_collection')
+  BuiltList<DocumentReference> get fromMessgesCollection;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(MassagesRecordBuilder builder) => builder
     ..massageValue = ''
-    ..messageId = ListBuilder();
+    ..messageId = ListBuilder()
+    ..fromMessgesCollection = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('massages');
@@ -64,7 +69,8 @@ Map<String, dynamic> createMassagesRecordData({
           ..guestUser = guestUser
           ..sentTime = sentTime
           ..massageValue = massageValue
-          ..messageId = null));
+          ..messageId = null
+          ..fromMessgesCollection = null));
 
 MassagesRecord get dummyMassagesRecord {
   final builder = MassagesRecordBuilder()
