@@ -64,10 +64,10 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     ),
                   ),
                   Expanded(
-                    child: StreamBuilder<List<ChatsRecord>>(
-                      stream: queryChatsRecord(
-                        queryBuilder: (chatsRecord) => chatsRecord.where(
-                            'activeChat',
+                    child: StreamBuilder<List<MassagesRecord>>(
+                      stream: queryMassagesRecord(
+                        queryBuilder: (massagesRecord) => massagesRecord.where(
+                            'activeUser',
                             isEqualTo: currentUserReference),
                       ),
                       builder: (context, snapshot) {
@@ -75,22 +75,22 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
                         }
-                        List<ChatsRecord> listViewChatsRecordList =
+                        List<MassagesRecord> listViewMassagesRecordList =
                             snapshot.data;
                         // Customize what your widget looks like with no query results.
                         if (snapshot.data.isEmpty) {
                           // return Container();
                           // For now, we'll just include some dummy data.
-                          listViewChatsRecordList =
-                              createDummyChatsRecord(count: 4);
+                          listViewMassagesRecordList =
+                              createDummyMassagesRecord(count: 4);
                         }
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           scrollDirection: Axis.vertical,
-                          itemCount: listViewChatsRecordList.length,
+                          itemCount: listViewMassagesRecordList.length,
                           itemBuilder: (context, listViewIndex) {
-                            final listViewChatsRecord =
-                                listViewChatsRecordList[listViewIndex];
+                            final listViewMassagesRecord =
+                                listViewMassagesRecordList[listViewIndex];
                             return Card(
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               color: Color(0xFFF5F5F5),
@@ -101,7 +101,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Text(
-                                      listViewChatsRecord.fromMsgs,
+                                      listViewMassagesRecord.fromMsgs,
                                       style:
                                           FlutterFlowTheme.bodyText1.override(
                                         fontFamily: 'Poppins',
@@ -120,7 +120,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                       child: Text(
-                                        listViewChatsRecord.chatEmail,
+                                        listViewMassagesRecord.chatEmail,
                                         style:
                                             FlutterFlowTheme.bodyText1.override(
                                           fontFamily: 'Poppins',
