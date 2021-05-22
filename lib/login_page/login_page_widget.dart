@@ -217,12 +217,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     return;
                                   }
 
-                                  await Navigator.pushAndRemoveUntil(
+                                  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => HomePageWidget(),
                                     ),
-                                    (r) => false,
                                   );
                                 },
                                 text: 'Sign in',
@@ -341,14 +340,12 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                                 if (user == null) {
                                                   return;
                                                 }
-                                                await Navigator
-                                                    .pushAndRemoveUntil(
+                                                await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         HomePageWidget(),
                                                   ),
-                                                  (r) => false,
                                                 );
                                               },
                                               text: 'Google',
