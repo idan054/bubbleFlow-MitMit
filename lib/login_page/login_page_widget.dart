@@ -2,6 +2,7 @@ import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../home_page/home_page_widget.dart';
+import '../sign_up/sign_up_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -398,21 +399,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                 ),
                                 InkWell(
                                   onTap: () async {
-                                    final user = await createAccountWithEmail(
-                                      context,
-                                      emailTextController.text,
-                                      passwordTextController.text,
-                                    );
-                                    if (user == null) {
-                                      return;
-                                    }
-
-                                    await Navigator.pushAndRemoveUntil(
+                                    await Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => HomePageWidget(),
+                                        builder: (context) => SignUpWidget(),
                                       ),
-                                      (r) => false,
                                     );
                                   },
                                   child: Text(
