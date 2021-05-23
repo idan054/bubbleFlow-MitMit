@@ -164,6 +164,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           builder: (context) => ChatPageWidget(
                                             localToEmail:
                                                 listViewUsersRecord.email,
+                                            localToID: listViewUsersRecord.uid,
                                           ),
                                         ),
                                       );

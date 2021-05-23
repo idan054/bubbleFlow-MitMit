@@ -12,11 +12,11 @@ class ChatPageWidget extends StatefulWidget {
   ChatPageWidget({
     Key key,
     this.localToEmail,
-    this.localChatID,
+    this.localToID,
   }) : super(key: key);
 
   final String localToEmail;
-  final String localChatID;
+  final String localToID;
 
   @override
   _ChatPageWidgetState createState() => _ChatPageWidgetState();
@@ -37,7 +37,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
     return StreamBuilder<List<MassagesRecord>>(
       stream: queryMassagesRecord(
         queryBuilder: (massagesRecord) => massagesRecord
-            .where('chatUsersFromTo', arrayContains: currentUserEmail),
+            .where('chatUsersFromTo', arrayContains: widget.localToEmail),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -516,9 +516,26 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     ),
                     IconButton(
                       onPressed: () async {
+                        final massagesRecordData = {
+                          'chatUsersFromTo':
+                              FieldValue.arrayUnion([widget.localToEmail]),
+                        };
+
+                        await chatPageMassagesRecord.reference
+                            .update(massagesRecordData);
+                      },
+                      icon: Icon(
+                        Icons.add_box_outlined,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      iconSize: 30,
+                    ),
+                    IconButton(
+                      onPressed: () async {
                         final fromID = currentUserUid;
                         final fromEmail = currentUserEmail;
-                        final toID = widget.localChatID;
+                        final toID = widget.localToID;
                         final toEmail = widget.localToEmail;
                         final msgValue = textController.text;
                         final timeIndex = getCurrentTimestamp;
@@ -539,13 +556,6 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                         await MassagesRecord.collection
                             .doc()
                             .set(massagesRecordData);
-                        final massagesRecordData = {
-                          'chatUsersFromTo': FieldValue.arrayUnion(
-                              ['addedBy ChatPage msgCollection Reffrene']),
-                        };
-
-                        await chatPageMassagesRecord.reference
-                            .update(massagesRecordData);
                       },
                       icon: Icon(
                         Icons.send,
