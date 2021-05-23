@@ -128,61 +128,38 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     itemBuilder: (context, listViewIndex) {
                       final listViewUsersRecord =
                           listViewUsersRecordList[listViewIndex];
-                      return StreamBuilder<List<MassagesRecord>>(
-                        stream: queryMassagesRecord(
-                          singleRecord: true,
-                        ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                          List<MassagesRecord> cardMassagesRecordList =
-                              snapshot.data;
-                          // Customize what your widget looks like with no query results.
-                          if (snapshot.data.isEmpty) {
-                            // return Container();
-                            // For now, we'll just include some dummy data.
-                            cardMassagesRecordList =
-                                createDummyMassagesRecord(count: 1);
-                          }
-                          final cardMassagesRecord =
-                              cardMassagesRecordList.first;
-                          return Padding(
-                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            child: InkWell(
-                              onTap: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChatPageWidget(
-                                      localToID: listViewUsersRecord.uid,
-                                      localToEmail: listViewUsersRecord.email,
-                                      chatRecord: cardMassagesRecord.reference,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                color: Color(0xFFF5F5F5),
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: InkWell(
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPageWidget(
+                                  localToID: listViewUsersRecord.uid,
+                                  localToEmail: listViewUsersRecord.email,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                                  child: Text(
-                                    listViewUsersRecord.email,
-                                    style: FlutterFlowTheme.bodyText1.override(
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            color: Color(0xFFF5F5F5),
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                              child: Text(
+                                listViewUsersRecord.email,
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
                                 ),
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       );
                     },
                   );

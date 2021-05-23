@@ -324,7 +324,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                     child: Text(
-                                      listViewIndex.toString(),
+                                      'Hello World',
                                       style:
                                           FlutterFlowTheme.bodyText1.override(
                                         fontFamily: 'Poppins',
@@ -410,12 +410,6 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     await MassagesRecord.collection
                         .doc()
                         .set(massagesRecordData);
-                    final massagesRecordData = {
-                      'chatFromToEmails':
-                          FieldValue.arrayUnion([widget.localToEmail]),
-                    };
-
-                    await widget.chatRecord.update(massagesRecordData);
                   },
                   icon: Icon(
                     Icons.send,
