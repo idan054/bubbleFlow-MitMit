@@ -141,9 +141,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                                padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
                                 child: Text(
                                   listViewUsersRecord.email,
                                   style: FlutterFlowTheme.bodyText1.override(
@@ -151,38 +152,18 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   ),
                                 ),
                               ),
-                              StreamBuilder<List<MassagesRecord>>(
-                                stream: queryMassagesRecord(
-                                  singleRecord: true,
-                                ),
-                                builder: (context, snapshot) {
-                                  // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  }
-                                  List<MassagesRecord>
-                                      buttonMassagesRecordList = snapshot.data;
-                                  // Customize what your widget looks like with no query results.
-                                  if (snapshot.data.isEmpty) {
-                                    // return Container();
-                                    // For now, we'll just include some dummy data.
-                                    buttonMassagesRecordList =
-                                        createDummyMassagesRecord(count: 1);
-                                  }
-                                  final buttonMassagesRecord =
-                                      buttonMassagesRecordList.first;
-                                  return FFButtonWidget(
+                              Align(
+                                alignment: Alignment(0, 0.65),
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(100, 0, 20, 0),
+                                  child: FFButtonWidget(
                                     onPressed: () async {
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => ChatPageWidget(
-                                            localToID: listViewUsersRecord.uid,
                                             localToEmail:
                                                 listViewUsersRecord.email,
-                                            localChatID:
-                                                buttonMassagesRecord.chatID,
                                           ),
                                         ),
                                       );
@@ -203,8 +184,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       ),
                                       borderRadius: 12,
                                     ),
-                                  );
-                                },
+                                  ),
+                                ),
                               )
                             ],
                           ),

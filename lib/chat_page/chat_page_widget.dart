@@ -11,12 +11,10 @@ import 'package:google_fonts/google_fonts.dart';
 class ChatPageWidget extends StatefulWidget {
   ChatPageWidget({
     Key key,
-    this.localToID,
     this.localToEmail,
     this.localChatID,
   }) : super(key: key);
 
-  final String localToID;
   final String localToEmail;
   final String localChatID;
 
@@ -36,14 +34,25 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<dynamic>(
-      future: randomUserDataCall(),
+    return StreamBuilder<List<MassagesRecord>>(
+      stream: queryMassagesRecord(
+        queryBuilder: (massagesRecord) => massagesRecord
+            .where('chatUsersFromTo', arrayContains: currentUserEmail),
+        singleRecord: true,
+      ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        final chatPageRandomUserDataResponse = snapshot.data;
+        List<MassagesRecord> chatPageMassagesRecordList = snapshot.data;
+        // Customize what your widget looks like with no query results.
+        if (snapshot.data.isEmpty) {
+          // return Container();
+          // For now, we'll just include some dummy data.
+          chatPageMassagesRecordList = createDummyMassagesRecord(count: 1);
+        }
+        final chatPageMassagesRecord = chatPageMassagesRecordList.first;
         return Scaffold(
           key: scaffoldKey,
           body: Align(
@@ -78,15 +87,6 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                   fontFamily: 'Poppins',
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                widget.localChatID,
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
                             )
                           ],
                         ),
@@ -108,7 +108,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                             Padding(
                               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: Text(
-                                widget.localToID,
+                                'localToID',
                                 style: FlutterFlowTheme.bodyText1.override(
                                   fontFamily: 'Poppins',
                                 ),
@@ -202,8 +202,10 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                   child: StreamBuilder<List<MassagesRecord>>(
                     stream: queryMassagesRecord(
                       queryBuilder: (massagesRecord) => massagesRecord
-                          .where('fromEmail', isEqualTo: currentUserEmail)
-                          .where('toEmail', isEqualTo: widget.localToEmail)
+                          .where('chatUsersFromTo',
+                              arrayContains: widget.localToEmail)
+                          .where('chatUsersFromTo',
+                              arrayContains: currentUserEmail)
                           .orderBy('timeIndex'),
                     ),
                     builder: (context, snapshot) {
@@ -459,17 +461,6 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                             fontFamily: 'Poppins',
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          listViewMassagesRecord.chatID,
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
                                       )
                                     ],
                                   ),
@@ -527,25 +518,34 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                       onPressed: () async {
                         final fromID = currentUserUid;
                         final fromEmail = currentUserEmail;
-                        final toID = widget.localToID;
+                        final toID = widget.localChatID;
                         final toEmail = widget.localToEmail;
                         final msgValue = textController.text;
                         final timeIndex = getCurrentTimestamp;
-                        final chatID = widget.localChatID;
 
-                        final massagesRecordData = createMassagesRecordData(
-                          fromID: fromID,
-                          fromEmail: fromEmail,
-                          toID: toID,
-                          toEmail: toEmail,
-                          msgValue: msgValue,
-                          timeIndex: timeIndex,
-                          chatID: chatID,
-                        );
+                        final massagesRecordData = {
+                          ...createMassagesRecordData(
+                            fromID: fromID,
+                            fromEmail: fromEmail,
+                            toID: toID,
+                            toEmail: toEmail,
+                            msgValue: msgValue,
+                            timeIndex: timeIndex,
+                          ),
+                          'chatUsersFromTo':
+                              FieldValue.arrayUnion([currentUserEmail]),
+                        };
 
                         await MassagesRecord.collection
                             .doc()
                             .set(massagesRecordData);
+                        final massagesRecordData = {
+                          'chatUsersFromTo': FieldValue.arrayUnion(
+                              ['addedBy ChatPage msgCollection Reffrene']),
+                        };
+
+                        await chatPageMassagesRecord.reference
+                            .update(massagesRecordData);
                       },
                       icon: Icon(
                         Icons.send,
