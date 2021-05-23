@@ -3,6 +3,8 @@ import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../chat_page/chat_page_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -161,39 +163,98 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   cardMassagesRecordList.first;
                               return Padding(
                                 padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: InkWell(
-                                  onTap: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ChatPageWidget(
-                                          localToID: listViewUsersRecord.uid,
-                                          localToEmail:
-                                              listViewUsersRecord.email,
-                                          localChatID:
-                                              cardMassagesRecord.toEmail,
+                                child: Card(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  color: Color(0xFFF5F5F5),
+                                  elevation: 5,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 10, 0, 10),
+                                        child: Text(
+                                          listViewUsersRecord.email,
+                                          style: FlutterFlowTheme.bodyText1
+                                              .override(
+                                            fontFamily: 'Poppins',
+                                          ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  child: Card(
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    color: Color(0xFFF5F5F5),
-                                    elevation: 5,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10, 10, 0, 10),
-                                      child: Text(
-                                        listViewUsersRecord.email,
-                                        style:
-                                            FlutterFlowTheme.bodyText1.override(
-                                          fontFamily: 'Poppins',
+                                      FFButtonWidget(
+                                        onPressed: () async {
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatPageWidget(
+                                                localToID:
+                                                    listViewUsersRecord.uid,
+                                                localToEmail:
+                                                    listViewUsersRecord.email,
+                                                localChatID: getJsonField(
+                                                        homePageRandomUserDataResponse,
+                                                        r'$.uid')
+                                                    .toString(),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        text: 'התחל',
+                                        options: FFButtonOptions(
+                                          width: 100,
+                                          height: 25,
+                                          color: FlutterFlowTheme.primaryColor,
+                                          textStyle: FlutterFlowTheme.subtitle2
+                                              .override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white,
+                                          ),
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1,
+                                          ),
+                                          borderRadius: 12,
                                         ),
                                       ),
-                                    ),
+                                      FFButtonWidget(
+                                        onPressed: () async {
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatPageWidget(
+                                                localToID:
+                                                    listViewUsersRecord.uid,
+                                                localToEmail:
+                                                    listViewUsersRecord.email,
+                                                localChatID:
+                                                    cardMassagesRecord.chatID,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        text: 'המשך',
+                                        options: FFButtonOptions(
+                                          width: 100,
+                                          height: 25,
+                                          color: FlutterFlowTheme.primaryColor,
+                                          textStyle: FlutterFlowTheme.subtitle2
+                                              .override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white,
+                                          ),
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1,
+                                          ),
+                                          borderRadius: 12,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               );
