@@ -73,10 +73,8 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
             Expanded(
               child: StreamBuilder<List<MassagesRecord>>(
                 stream: queryMassagesRecord(
-                  queryBuilder: (massagesRecord) => massagesRecord
-                      .where('fromID', isEqualTo: currentUserEmail)
-                      .where('toEmail', isEqualTo: widget.localToEmail)
-                      .orderBy('timeIndex'),
+                  queryBuilder: (massagesRecord) =>
+                      massagesRecord.orderBy('timeIndex'),
                 ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
