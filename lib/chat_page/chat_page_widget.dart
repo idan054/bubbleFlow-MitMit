@@ -73,7 +73,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
               child: StreamBuilder<List<MassagesRecord>>(
                 stream: queryMassagesRecord(
                   queryBuilder: (massagesRecord) => massagesRecord
-                      .where('msgValue', isEqualTo: 'BRO')
+                      .where('toEmail', isEqualTo: widget.localToEmail)
                       .orderBy('timeIndex'),
                 ),
                 builder: (context, snapshot) {
