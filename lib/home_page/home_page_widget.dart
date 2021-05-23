@@ -3,7 +3,6 @@ import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../chat_page/chat_page_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -151,52 +150,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     fontFamily: 'Poppins',
                                   ),
                                 ),
-                              ),
-                              FutureBuilder<dynamic>(
-                                future: randomUserDataCall(),
-                                builder: (context, snapshot) {
-                                  // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  }
-                                  final buttonRandomUserDataResponse =
-                                      snapshot.data;
-                                  return FFButtonWidget(
-                                    onPressed: () async {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ChatPageWidget(
-                                            localToID: listViewUsersRecord.uid,
-                                            localToEmail:
-                                                listViewUsersRecord.email,
-                                            localChatID: getJsonField(
-                                                    buttonRandomUserDataResponse,
-                                                    r'$.uid')
-                                                .toString(),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    text: 'התחל',
-                                    options: FFButtonOptions(
-                                      width: 100,
-                                      height: 25,
-                                      color: FlutterFlowTheme.primaryColor,
-                                      textStyle:
-                                          FlutterFlowTheme.subtitle2.override(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                      ),
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1,
-                                      ),
-                                      borderRadius: 12,
-                                    ),
-                                  );
-                                },
                               ),
                               StreamBuilder<List<MassagesRecord>>(
                                 stream: queryMassagesRecord(

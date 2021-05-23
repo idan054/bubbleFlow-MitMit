@@ -53,39 +53,157 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  widget.localChatID,
+                  'Local DATA',
                   style: FlutterFlowTheme.bodyText1.override(
                     fontFamily: 'Poppins',
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      currentUserDisplayName,
-                      style: FlutterFlowTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+                Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  color: Color(0xFF8B97A2),
+                  elevation: 10,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'localChatID',
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                widget.localChatID,
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Text(
-                      currentUserEmail,
-                      style: FlutterFlowTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'localToID',
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                widget.localToID,
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Text(
-                      currentUserUid,
-                      style: FlutterFlowTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'localToEmail',
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                widget.localToEmail,
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'logged user id',
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                currentUserUid,
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'logged user email',
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                currentUserEmail,
+                                style: FlutterFlowTheme.bodyText1.override(
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: StreamBuilder<List<MassagesRecord>>(
                     stream: queryMassagesRecord(
                       queryBuilder: (massagesRecord) => massagesRecord
-                          .where('chatID', isEqualTo: widget.localChatID)
+                          .where('fromEmail', isEqualTo: currentUserEmail)
+                          .where('toEmail', isEqualTo: widget.localToEmail)
                           .orderBy('timeIndex'),
                     ),
                     builder: (context, snapshot) {
