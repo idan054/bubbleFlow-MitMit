@@ -2,8 +2,6 @@ import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../chat_page/chat_page_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -134,25 +132,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         child: InkWell(
                           onTap: () async {
-                            final chatUser = listViewUsersRecord.displayName;
-                            final chatEmail = listViewUsersRecord.email;
-                            final chatID = listViewUsersRecord.uid;
-                            final activeChat = currentUserReference;
-
-                            final chatsRecordData = createChatsRecordData(
-                              chatUser: chatUser,
-                              chatEmail: chatEmail,
-                              chatID: chatID,
-                              activeChat: activeChat,
-                            );
-
-                            await ChatsRecord.collection
-                                .doc()
-                                .set(chatsRecordData);
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ChatPageWidget(),
+                                builder: (context) => ChatPageWidget(
+                                  localToID: listViewUsersRecord.uid,
+                                  localToEmail: listViewUsersRecord.email,
+                                ),
                               ),
                             );
                           },

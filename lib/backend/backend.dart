@@ -5,12 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 
 import 'schema/users_record.dart';
-import 'schema/chats_record.dart';
 import 'schema/massages_record.dart';
 import 'schema/serializers.dart';
 
 export 'schema/users_record.dart';
-export 'schema/chats_record.dart';
 export 'schema/massages_record.dart';
 
 Stream<List<UsersRecord>> queryUsersRecord(
@@ -18,13 +16,6 @@ Stream<List<UsersRecord>> queryUsersRecord(
         int limit = -1,
         bool singleRecord = false}) =>
     queryCollection(UsersRecord.collection, UsersRecord.serializer,
-        queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
-
-Stream<List<ChatsRecord>> queryChatsRecord(
-        {Query Function(Query) queryBuilder,
-        int limit = -1,
-        bool singleRecord = false}) =>
-    queryCollection(ChatsRecord.collection, ChatsRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
 Stream<List<MassagesRecord>> queryMassagesRecord(

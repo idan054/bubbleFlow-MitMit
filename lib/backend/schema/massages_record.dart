@@ -14,35 +14,33 @@ abstract class MassagesRecord
       _$massagesRecordSerializer;
 
   @nullable
-  DocumentReference get activeUser;
+  String get fromID;
 
   @nullable
-  DocumentReference get guestUser;
+  String get fromEmail;
 
   @nullable
-  @BuiltValueField(wireName: 'sent_time')
-  Timestamp get sentTime;
+  String get toID;
 
   @nullable
-  @BuiltValueField(wireName: 'massage_value')
-  String get massageValue;
+  String get toEmail;
 
   @nullable
-  @BuiltValueField(wireName: 'message_id')
-  BuiltList<int> get messageId;
+  String get msgValue;
 
   @nullable
-  @BuiltValueField(wireName: 'from_messges_collection')
-  BuiltList<DocumentReference> get fromMessgesCollection;
+  Timestamp get timeIndex;
 
   @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(MassagesRecordBuilder builder) => builder
-    ..massageValue = ''
-    ..messageId = ListBuilder()
-    ..fromMessgesCollection = ListBuilder();
+    ..fromID = ''
+    ..fromEmail = ''
+    ..toID = ''
+    ..toEmail = ''
+    ..msgValue = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('massages');
@@ -57,26 +55,31 @@ abstract class MassagesRecord
 }
 
 Map<String, dynamic> createMassagesRecordData({
-  DocumentReference activeUser,
-  DocumentReference guestUser,
-  Timestamp sentTime,
-  String massageValue,
+  String fromID,
+  String fromEmail,
+  String toID,
+  String toEmail,
+  String msgValue,
+  Timestamp timeIndex,
 }) =>
     serializers.serializeWith(
         MassagesRecord.serializer,
         MassagesRecord((m) => m
-          ..activeUser = activeUser
-          ..guestUser = guestUser
-          ..sentTime = sentTime
-          ..massageValue = massageValue
-          ..messageId = null
-          ..fromMessgesCollection = null));
+          ..fromID = fromID
+          ..fromEmail = fromEmail
+          ..toID = toID
+          ..toEmail = toEmail
+          ..msgValue = msgValue
+          ..timeIndex = timeIndex));
 
 MassagesRecord get dummyMassagesRecord {
   final builder = MassagesRecordBuilder()
-    ..sentTime = dummyTimestamp
-    ..massageValue = dummyString
-    ..messageId = ListBuilder([dummyInteger, dummyInteger]);
+    ..fromID = dummyString
+    ..fromEmail = dummyString
+    ..toID = dummyString
+    ..toEmail = dummyString
+    ..msgValue = dummyString
+    ..timeIndex = dummyTimestamp;
   return builder.build();
 }
 
