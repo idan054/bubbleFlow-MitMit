@@ -233,7 +233,7 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(11, 0, 0, 0),
                                     child: Text(
                                       listViewMassagesRecord.msgValue,
                                       style:
