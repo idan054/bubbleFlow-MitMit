@@ -32,6 +32,12 @@ abstract class MassagesRecord
   Timestamp get timeIndex;
 
   @nullable
+  BuiltList<String> get chatFromToEmails;
+
+  @nullable
+  DocumentReference get chatRecord;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -40,7 +46,8 @@ abstract class MassagesRecord
     ..fromEmail = ''
     ..toID = ''
     ..toEmail = ''
-    ..msgValue = '';
+    ..msgValue = ''
+    ..chatFromToEmails = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('massages');
@@ -61,6 +68,7 @@ Map<String, dynamic> createMassagesRecordData({
   String toEmail,
   String msgValue,
   Timestamp timeIndex,
+  DocumentReference chatRecord,
 }) =>
     serializers.serializeWith(
         MassagesRecord.serializer,
@@ -70,7 +78,9 @@ Map<String, dynamic> createMassagesRecordData({
           ..toID = toID
           ..toEmail = toEmail
           ..msgValue = msgValue
-          ..timeIndex = timeIndex));
+          ..timeIndex = timeIndex
+          ..chatFromToEmails = null
+          ..chatRecord = chatRecord));
 
 MassagesRecord get dummyMassagesRecord {
   final builder = MassagesRecordBuilder()
@@ -79,7 +89,8 @@ MassagesRecord get dummyMassagesRecord {
     ..toID = dummyString
     ..toEmail = dummyString
     ..msgValue = dummyString
-    ..timeIndex = dummyTimestamp;
+    ..timeIndex = dummyTimestamp
+    ..chatFromToEmails = ListBuilder([dummyString, dummyString]);
   return builder.build();
 }
 

@@ -12,10 +12,12 @@ class ChatPageWidget extends StatefulWidget {
     Key key,
     this.localToID,
     this.localToEmail,
+    this.chatRecord,
   }) : super(key: key);
 
   final String localToID;
   final String localToEmail;
+  final DocumentReference chatRecord;
 
   @override
   _ChatPageWidgetState createState() => _ChatPageWidgetState();
@@ -301,6 +303,34 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                                   )
                                 ],
                               ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'chatRecor',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      listViewIndex.toString(),
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ),
@@ -359,19 +389,31 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                     final toEmail = widget.localToEmail;
                     final msgValue = textController.text;
                     final timeIndex = getCurrentTimestamp;
+                    final chatRecord = widget.chatRecord;
 
-                    final massagesRecordData = createMassagesRecordData(
-                      fromID: fromID,
-                      fromEmail: fromEmail,
-                      toID: toID,
-                      toEmail: toEmail,
-                      msgValue: msgValue,
-                      timeIndex: timeIndex,
-                    );
+                    final massagesRecordData = {
+                      ...createMassagesRecordData(
+                        fromID: fromID,
+                        fromEmail: fromEmail,
+                        toID: toID,
+                        toEmail: toEmail,
+                        msgValue: msgValue,
+                        timeIndex: timeIndex,
+                        chatRecord: chatRecord,
+                      ),
+                      'chatFromToEmails':
+                          FieldValue.arrayUnion([currentUserEmail]),
+                    };
 
                     await MassagesRecord.collection
                         .doc()
                         .set(massagesRecordData);
+                    final massagesRecordData = {
+                      'chatFromToEmails':
+                          FieldValue.arrayUnion([widget.localToEmail]),
+                    };
+
+                    await widget.chatRecord.update(massagesRecordData);
                   },
                   icon: Icon(
                     Icons.send,
