@@ -12,10 +12,12 @@ class ChatPageWidget extends StatefulWidget {
     Key key,
     this.localToEmail,
     this.localToID,
+    this.token,
   }) : super(key: key);
 
   final String localToEmail;
   final String localToID;
+  final String token;
 
   @override
   _ChatPageWidgetState createState() => _ChatPageWidgetState();
@@ -33,543 +35,485 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<MassagesRecord>>(
-      stream: queryMassagesRecord(
-        queryBuilder: (massagesRecord) => massagesRecord
-            .where('chatUsersFromTo', arrayContains: widget.localToEmail),
-        singleRecord: true,
-      ),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-        List<MassagesRecord> chatPageMassagesRecordList = snapshot.data;
-        // Customize what your widget looks like with no query results.
-        if (snapshot.data.isEmpty) {
-          // return Container();
-          // For now, we'll just include some dummy data.
-          chatPageMassagesRecordList = createDummyMassagesRecord(count: 1);
-        }
-        final chatPageMassagesRecord = chatPageMassagesRecordList.first;
-        return Scaffold(
-          key: scaffoldKey,
-          body: Align(
-            alignment: Alignment(0.05, 0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  'Local DATA',
-                  style: FlutterFlowTheme.bodyText1.override(
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  color: Color(0xFF8B97A2),
-                  elevation: 10,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                'localChatID',
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                'localToID',
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                'localToID',
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                'localToEmail',
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                widget.localToEmail,
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                'logged user id',
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                currentUserUid,
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                'logged user email',
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Text(
-                                currentUserEmail,
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: StreamBuilder<List<MassagesRecord>>(
-                    stream: queryMassagesRecord(
-                      queryBuilder: (massagesRecord) => massagesRecord
-                          .where('chatUsersFromTo',
-                              arrayContains: widget.localToEmail)
-                          .where('chatUsersFromTo',
-                              arrayContains: currentUserEmail)
-                          .orderBy('timeIndex'),
-                    ),
-                    builder: (context, snapshot) {
-                      // Customize what your widget looks like when it's loading.
-                      if (!snapshot.hasData) {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                      List<MassagesRecord> listViewMassagesRecordList =
-                          snapshot.data;
-                      // Customize what your widget looks like with no query results.
-                      if (snapshot.data.isEmpty) {
-                        // return Container();
-                        // For now, we'll just include some dummy data.
-                        listViewMassagesRecordList =
-                            createDummyMassagesRecord(count: 4);
-                      }
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        scrollDirection: Axis.vertical,
-                        itemCount: listViewMassagesRecordList.length,
-                        itemBuilder: (context, listViewIndex) {
-                          final listViewMassagesRecord =
-                              listViewMassagesRecordList[listViewIndex];
-                          return Card(
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            color: Color(0xFFF5F5F5),
-                            elevation: 10,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'fromID',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          listViewMassagesRecord.fromID,
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'fromEmail',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          listViewMassagesRecord.fromEmail,
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'toID',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          listViewMassagesRecord.toID,
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'toEmail',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          listViewMassagesRecord.toEmail,
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'msgValue',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(11, 0, 0, 0),
-                                        child: Text(
-                                          listViewMassagesRecord.msgValue,
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'timeIndex',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: AutoSizeText(
-                                          'timeIndex PlaceHolder',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'indexInList',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          listViewIndex.toString(),
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          'chatID',
-                                          style: FlutterFlowTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: TextFormField(
-                          controller: textController,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            hintText: 'msg to firebase',
-                            hintStyle: FlutterFlowTheme.bodyText1.override(
+    return Scaffold(
+      key: scaffoldKey,
+      body: Align(
+        alignment: Alignment(0.05, 0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              widget.token,
+              style: FlutterFlowTheme.bodyText1.override(
+                fontFamily: 'Poppins',
+              ),
+            ),
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              color: Color(0xFF8B97A2),
+              elevation: 10,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'localChatID',
+                            style: FlutterFlowTheme.bodyText1.override(
                               fontFamily: 'Poppins',
                             ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'localToID',
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
                             ),
                           ),
-                          style: FlutterFlowTheme.bodyText1.override(
-                            fontFamily: 'Poppins',
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'localToID',
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'localToEmail',
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            widget.localToEmail,
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'logged user id',
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            currentUserUid,
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'logged user email',
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            currentUserEmail,
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder<List<MassagesRecord>>(
+                stream: queryMassagesRecord(
+                  queryBuilder: (massagesRecord) => massagesRecord
+                      .where('fromID', isEqualTo: currentUserUid)
+                      .where('toID', isEqualTo: widget.localToID),
+                ),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  List<MassagesRecord> listViewMassagesRecordList =
+                      snapshot.data;
+                  // Customize what your widget looks like with no query results.
+                  if (snapshot.data.isEmpty) {
+                    // return Container();
+                    // For now, we'll just include some dummy data.
+                    listViewMassagesRecordList =
+                        createDummyMassagesRecord(count: 4);
+                  }
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.vertical,
+                    itemCount: listViewMassagesRecordList.length,
+                    itemBuilder: (context, listViewIndex) {
+                      final listViewMassagesRecord =
+                          listViewMassagesRecordList[listViewIndex];
+                      return Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: Color(0xFFF5F5F5),
+                        elevation: 10,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'fromID',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      listViewMassagesRecord.fromID,
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'fromEmail',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      listViewMassagesRecord.fromEmail,
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'toID',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      listViewMassagesRecord.toID,
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'toEmail',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      listViewMassagesRecord.toEmail,
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'msgValue',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(11, 0, 0, 0),
+                                    child: Text(
+                                      listViewMassagesRecord.msgValue,
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'timeIndex',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: AutoSizeText(
+                                      'Hello World',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'indexInList',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'Hello World',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      'Hello World',
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: TextFormField(
+                      controller: textController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'msg to firebase',
+                        hintStyle: FlutterFlowTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(4.0),
+                            topRight: Radius.circular(4.0),
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(4.0),
+                            topRight: Radius.circular(4.0),
                           ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        final massagesRecordData = {
-                          'chatUsersFromTo':
-                              FieldValue.arrayUnion([widget.localToEmail]),
-                        };
-
-                        await chatPageMassagesRecord.reference
-                            .update(massagesRecordData);
-                      },
-                      icon: Icon(
-                        Icons.add_box_outlined,
-                        color: Colors.black,
-                        size: 30,
+                      style: FlutterFlowTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
                       ),
-                      iconSize: 30,
                     ),
-                    IconButton(
-                      onPressed: () async {
-                        final fromID = currentUserUid;
-                        final fromEmail = currentUserEmail;
-                        final toID = widget.localToID;
-                        final toEmail = widget.localToEmail;
-                        final msgValue = textController.text;
-                        final timeIndex = getCurrentTimestamp;
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    final fromID = currentUserUid;
+                    final fromEmail = currentUserEmail;
+                    final toID = widget.localToID;
+                    final toEmail = widget.localToEmail;
+                    final msgValue = textController.text;
+                    final timeIndex = getCurrentTimestamp;
+                    final chatToken = widget.token;
 
-                        final massagesRecordData = {
-                          ...createMassagesRecordData(
-                            fromID: fromID,
-                            fromEmail: fromEmail,
-                            toID: toID,
-                            toEmail: toEmail,
-                            msgValue: msgValue,
-                            timeIndex: timeIndex,
-                          ),
-                          'chatUsersFromTo':
-                              FieldValue.arrayUnion([currentUserEmail]),
-                        };
+                    final massagesRecordData = createMassagesRecordData(
+                      fromID: fromID,
+                      fromEmail: fromEmail,
+                      toID: toID,
+                      toEmail: toEmail,
+                      msgValue: msgValue,
+                      timeIndex: timeIndex,
+                      chatToken: chatToken,
+                    );
 
-                        await MassagesRecord.collection
-                            .doc()
-                            .set(massagesRecordData);
-                      },
-                      icon: Icon(
-                        Icons.send,
-                        color: Colors.black,
-                        size: 30,
-                      ),
-                      iconSize: 30,
-                    )
-                  ],
+                    await MassagesRecord.collection
+                        .doc()
+                        .set(massagesRecordData);
+                  },
+                  icon: Icon(
+                    Icons.send,
+                    color: Colors.black,
+                    size: 30,
+                  ),
+                  iconSize: 30,
                 )
               ],
-            ),
-          ),
-        );
-      },
+            )
+          ],
+        ),
+      ),
     );
   }
 }

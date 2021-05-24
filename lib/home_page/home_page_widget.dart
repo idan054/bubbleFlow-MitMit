@@ -1,4 +1,5 @@
 import '../auth/auth_util.dart';
+import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../chat_page/chat_page_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -32,125 +33,114 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.tertiaryColor,
-      body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Align(
-              alignment: Alignment(0, 0.05),
-              child: Text(
-                currentUserEmail,
-                style: FlutterFlowTheme.bodyText1.override(
-                  fontFamily: 'Poppins',
-                ),
-              ),
-            ),
-            Row(
+    return FutureBuilder<dynamic>(
+      future: randomUserDataCall(),
+      builder: (context, snapshot) {
+        // Customize what your widget looks like when it's loading.
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        final homePageRandomUserDataResponse = snapshot.data;
+        return Scaffold(
+          key: scaffoldKey,
+          backgroundColor: FlutterFlowTheme.tertiaryColor,
+          body: SafeArea(
+            child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                IconButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePageWidget(
-                          searchedUser: textController.text,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.search,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                  iconSize: 30,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: textController,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      hintText: 'Search for user...',
-                      hintStyle: FlutterFlowTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(4.0),
-                          topRight: Radius.circular(4.0),
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(4.0),
-                          topRight: Radius.circular(4.0),
-                        ),
-                      ),
-                    ),
+                Align(
+                  alignment: Alignment(0, 0.05),
+                  child: Text(
+                    currentUserEmail,
                     style: FlutterFlowTheme.bodyText1.override(
                       fontFamily: 'Poppins',
                     ),
                   ),
-                )
-              ],
-            ),
-            Expanded(
-              child: StreamBuilder<List<UsersRecord>>(
-                stream: queryUsersRecord(
-                  queryBuilder: (usersRecord) => usersRecord.where('email',
-                      isEqualTo: widget.searchedUser),
                 ),
-                builder: (context, snapshot) {
-                  // Customize what your widget looks like when it's loading.
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  List<UsersRecord> listViewUsersRecordList = snapshot.data;
-                  // Customize what your widget looks like with no query results.
-                  if (snapshot.data.isEmpty) {
-                    // return Container();
-                    // For now, we'll just include some dummy data.
-                    listViewUsersRecordList = createDummyUsersRecord(count: 4);
-                  }
-                  return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    scrollDirection: Axis.vertical,
-                    itemCount: listViewUsersRecordList.length,
-                    itemBuilder: (context, listViewIndex) {
-                      final listViewUsersRecord =
-                          listViewUsersRecordList[listViewIndex];
-                      return StreamBuilder<List<MassagesRecord>>(
-                        stream: queryMassagesRecord(
-                          singleRecord: true,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePageWidget(
+                              searchedUser: textController.text,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      iconSize: 30,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: textController,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          hintText: 'Search for user...',
+                          hintStyle: FlutterFlowTheme.bodyText1.override(
+                            fontFamily: 'Poppins',
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(4.0),
+                              topRight: Radius.circular(4.0),
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(4.0),
+                              topRight: Radius.circular(4.0),
+                            ),
+                          ),
                         ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                          List<MassagesRecord> cardMassagesRecordList =
-                              snapshot.data;
-                          // Customize what your widget looks like with no query results.
-                          if (snapshot.data.isEmpty) {
-                            // return Container();
-                            // For now, we'll just include some dummy data.
-                            cardMassagesRecordList =
-                                createDummyMassagesRecord(count: 1);
-                          }
-                          final cardMassagesRecord =
-                              cardMassagesRecordList.first;
+                        style: FlutterFlowTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: StreamBuilder<List<UsersRecord>>(
+                    stream: queryUsersRecord(
+                      queryBuilder: (usersRecord) => usersRecord.where('email',
+                          isEqualTo: widget.searchedUser),
+                    ),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      List<UsersRecord> listViewUsersRecordList = snapshot.data;
+                      // Customize what your widget looks like with no query results.
+                      if (snapshot.data.isEmpty) {
+                        // return Container();
+                        // For now, we'll just include some dummy data.
+                        listViewUsersRecordList =
+                            createDummyUsersRecord(count: 4);
+                      }
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        scrollDirection: Axis.vertical,
+                        itemCount: listViewUsersRecordList.length,
+                        itemBuilder: (context, listViewIndex) {
+                          final listViewUsersRecord =
+                              listViewUsersRecordList[listViewIndex];
                           return Padding(
                             padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                             child: Card(
@@ -175,16 +165,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-                                    child: Text(
-                                      cardMassagesRecord.toEmail,
-                                      style:
-                                          FlutterFlowTheme.bodyText1.override(
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                  ),
                                   Align(
                                     alignment: Alignment(0, 0.65),
                                     child: Padding(
@@ -201,18 +181,31 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                     listViewUsersRecord.email,
                                                 localToID:
                                                     listViewUsersRecord.uid,
+                                                token: getJsonField(
+                                                        homePageRandomUserDataResponse,
+                                                        r'$.uid')
+                                                    .toString(),
                                               ),
                                             ),
                                           );
-                                          final massagesRecordData = {
-                                            'chatUsersFromTo':
-                                                FieldValue.arrayUnion([
-                                              listViewUsersRecord.email
-                                            ]),
-                                          };
+                                          final authUid = currentUserUid;
+                                          final guestUid =
+                                              listViewUsersRecord.uid;
+                                          final chatToken = getJsonField(
+                                                  homePageRandomUserDataResponse,
+                                                  r'$.uid')
+                                              .toString();
 
-                                          await cardMassagesRecord.reference
-                                              .update(massagesRecordData);
+                                          final chatsRecordData =
+                                              createChatsRecordData(
+                                            authUid: authUid,
+                                            guestUid: guestUid,
+                                            chatToken: chatToken,
+                                          );
+
+                                          await ChatsRecord.collection
+                                              .doc()
+                                              .set(chatsRecordData);
                                         },
                                         text: 'המשך',
                                         options: FFButtonOptions(
@@ -240,13 +233,23 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         },
                       );
                     },
-                  );
-                },
-              ),
-            )
-          ],
-        ),
-      ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment(0, 0.05),
+                  child: Text(
+                    getJsonField(homePageRandomUserDataResponse, r'$.uid')
+                        .toString(),
+                    style: FlutterFlowTheme.bodyText1.override(
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
