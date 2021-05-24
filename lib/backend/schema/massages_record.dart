@@ -35,6 +35,10 @@ abstract class MassagesRecord
   BuiltList<String> get chatUsersFromTo;
 
   @nullable
+  @BuiltValueField(wireName: 'auth_user_ref')
+  DocumentReference get authUserRef;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -65,6 +69,7 @@ Map<String, dynamic> createMassagesRecordData({
   String toEmail,
   String msgValue,
   Timestamp timeIndex,
+  DocumentReference authUserRef,
 }) =>
     serializers.serializeWith(
         MassagesRecord.serializer,
@@ -75,7 +80,8 @@ Map<String, dynamic> createMassagesRecordData({
           ..toEmail = toEmail
           ..msgValue = msgValue
           ..timeIndex = timeIndex
-          ..chatUsersFromTo = null));
+          ..chatUsersFromTo = null
+          ..authUserRef = authUserRef));
 
 MassagesRecord get dummyMassagesRecord {
   final builder = MassagesRecordBuilder()

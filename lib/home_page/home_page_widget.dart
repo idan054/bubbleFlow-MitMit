@@ -1,9 +1,10 @@
 import '../auth/auth_util.dart';
-import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../chat_page/chat_page_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -130,67 +131,116 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     itemBuilder: (context, listViewIndex) {
                       final listViewUsersRecord =
                           listViewUsersRecordList[listViewIndex];
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Color(0xFFF5F5F5),
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-                                child: Text(
-                                  listViewUsersRecord.email,
-                                  style: FlutterFlowTheme.bodyText1.override(
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
+                      return StreamBuilder<List<MassagesRecord>>(
+                        stream: queryMassagesRecord(
+                          queryBuilder: (massagesRecord) =>
+                              massagesRecord.where('fromEmail',
+                                  isEqualTo: listViewUsersRecord.email),
+                          singleRecord: true,
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          List<MassagesRecord> cardMassagesRecordList =
+                              snapshot.data;
+                          // Customize what your widget looks like with no query results.
+                          if (snapshot.data.isEmpty) {
+                            // return Container();
+                            // For now, we'll just include some dummy data.
+                            cardMassagesRecordList =
+                                createDummyMassagesRecord(count: 1);
+                          }
+                          final cardMassagesRecord =
+                              cardMassagesRecordList.first;
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              color: Color(0xFFF5F5F5),
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              Align(
-                                alignment: Alignment(0, 0.65),
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(100, 0, 20, 0),
-                                  child: FFButtonWidget(
-                                    onPressed: () async {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ChatPageWidget(
-                                            localToEmail:
-                                                listViewUsersRecord.email,
-                                            localToID: listViewUsersRecord.uid,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    text: 'המשך',
-                                    options: FFButtonOptions(
-                                      width: 100,
-                                      height: 25,
-                                      color: FlutterFlowTheme.primaryColor,
-                                      textStyle:
-                                          FlutterFlowTheme.subtitle2.override(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                                    child: Text(
+                                      listViewUsersRecord.email,
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
                                         fontFamily: 'Poppins',
-                                        color: Colors.white,
                                       ),
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1,
-                                      ),
-                                      borderRadius: 12,
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                                    child: Text(
+                                      cardMassagesRecord.toEmail,
+                                      style:
+                                          FlutterFlowTheme.bodyText1.override(
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment(0, 0.65),
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(100, 0, 20, 0),
+                                      child: FFButtonWidget(
+                                        onPressed: () async {
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatPageWidget(
+                                                localToEmail:
+                                                    listViewUsersRecord.email,
+                                                localToID:
+                                                    listViewUsersRecord.uid,
+                                              ),
+                                            ),
+                                          );
+                                          final massagesRecordData = {
+                                            'chatUsersFromTo':
+                                                FieldValue.arrayUnion([
+                                              listViewUsersRecord.email
+                                            ]),
+                                          };
+
+                                          await cardMassagesRecord.reference
+                                              .update(massagesRecordData);
+                                        },
+                                        text: 'המשך',
+                                        options: FFButtonOptions(
+                                          width: 100,
+                                          height: 25,
+                                          color: FlutterFlowTheme.primaryColor,
+                                          textStyle: FlutterFlowTheme.subtitle2
+                                              .override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white,
+                                          ),
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1,
+                                          ),
+                                          borderRadius: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
