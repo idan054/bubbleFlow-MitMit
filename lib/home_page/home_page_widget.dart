@@ -133,9 +133,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           listViewUsersRecordList[listViewIndex];
                       return StreamBuilder<List<MassagesRecord>>(
                         stream: queryMassagesRecord(
-                          queryBuilder: (massagesRecord) =>
-                              massagesRecord.where('fromEmail',
-                                  isEqualTo: listViewUsersRecord.email),
                           singleRecord: true,
                         ),
                         builder: (context, snapshot) {
