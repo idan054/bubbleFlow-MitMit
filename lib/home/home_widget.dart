@@ -38,16 +38,15 @@ class _HomeWidgetState extends State<HomeWidget> {
             final listViewFireBaseGetResponse = snapshot.data;
             return Builder(
               builder: (context) {
-                final getListView =
-                    getJsonField(listViewFireBaseGetResponse, r'$[:].email')
-                            ?.toList() ??
-                        [];
+                final x = getJsonField(listViewFireBaseGetResponse, r'$.[:]')
+                        ?.toList() ??
+                    [];
                 return ListView.builder(
                   padding: EdgeInsets.zero,
                   scrollDirection: Axis.vertical,
-                  itemCount: getListView.length,
-                  itemBuilder: (context, getListViewIndex) {
-                    final getListViewItem = getListView[getListViewIndex];
+                  itemCount: x.length,
+                  itemBuilder: (context, xIndex) {
+                    final xItem = x[xIndex];
                     return Card(
                       clipBehavior: Clip.antiAliasWithSaveLayer,
                       color: Color(0xFFF5F5F5),
@@ -55,8 +54,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: Text(
-                          getJsonField(getListViewItem, r'$[:].email')
-                              .toString(),
+                          'Hello World',
                           style: FlutterFlowTheme.bodyText1.override(
                             fontFamily: 'Poppins',
                           ),
