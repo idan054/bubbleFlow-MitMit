@@ -36,35 +36,26 @@ class _HomeWidgetState extends State<HomeWidget> {
               return Center(child: CircularProgressIndicator());
             }
             final listViewFireBaseGetResponse = snapshot.data;
-            return Builder(
-              builder: (context) {
-                final x =
-                    getJsonField(listViewFireBaseGetResponse, r'$.[:].uid')
-                            ?.toList() ??
-                        [];
-                return ListView.builder(
-                  padding: EdgeInsets.zero,
-                  scrollDirection: Axis.vertical,
-                  itemCount: x.length,
-                  itemBuilder: (context, xIndex) {
-                    final xItem = x[xIndex];
-                    return Card(
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      color: Color(0xFFF5F5F5),
-                      elevation: 5,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        child: Text(
-                          'Hello World',
-                          style: FlutterFlowTheme.bodyText1.override(
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
+            return ListView(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.vertical,
+              children: [
+                Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  color: Color(0xFFF5F5F5),
+                  elevation: 5,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Text(
+                      getJsonField(listViewFireBaseGetResponse, r'$.[:1].email')
+                          .toString(),
+                      style: FlutterFlowTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
                       ),
-                    );
-                  },
-                );
-              },
+                    ),
+                  ),
+                )
+              ],
             );
           },
         ),
