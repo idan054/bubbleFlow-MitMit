@@ -37,7 +37,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             return Builder(
               builder: (context) {
                 final list =
-                    getJsonField(listViewFireBaseGetResponse, r'$.created_time')
+                    getJsonField(listViewFireBaseGetResponse, r'$.email')
                             ?.toList() ??
                         [];
                 return ListView.builder(
