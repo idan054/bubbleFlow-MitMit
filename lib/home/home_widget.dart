@@ -26,38 +26,38 @@ class _HomeWidgetState extends State<HomeWidget> {
         elevation: 8,
       ),
       body: SafeArea(
-        child: FutureBuilder<dynamic>(
-          future: fireBaseGetCall(
-            collectionPath: 'users',
-          ),
-          builder: (context, snapshot) {
-            // Customize what your widget looks like when it's loading.
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
-            }
-            final listViewFireBaseGetResponse = snapshot.data;
-            return ListView(
-              padding: EdgeInsets.zero,
-              scrollDirection: Axis.vertical,
-              children: [
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  color: Color(0xFFF5F5F5),
-                  elevation: 5,
-                  child: Padding(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          scrollDirection: Axis.vertical,
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              color: Color(0xFFF5F5F5),
+              elevation: 5,
+              child: FutureBuilder<dynamic>(
+                future: fireBaseGetCall(
+                  collectionPath: 'users',
+                ),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  final textFireBaseGetResponse = snapshot.data;
+                  return Padding(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Text(
-                      getJsonField(listViewFireBaseGetResponse, r'$.[:1].email')
+                      getJsonField(textFireBaseGetResponse, r'$.[:1].email')
                           .toString(),
                       style: FlutterFlowTheme.bodyText1.override(
                         fontFamily: 'Poppins',
                       ),
                     ),
-                  ),
-                )
-              ],
-            );
-          },
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
