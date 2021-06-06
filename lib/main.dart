@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'auth/firebase_user_provider.dart';
 import 'package:mi_t_mi_t/login_page/login_page_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
-import 'home_page/home_page_widget.dart';
-import 'login_page/login_page_widget.dart';
+import 'private_chats/private_chats_widget.dart';
+import 'home/home_widget.dart';
+import 'mi_ting_page/mi_ting_page_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,7 +60,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPage = 'HomePage';
+  String _currentPage = 'Home';
 
   @override
   void initState() {
@@ -69,8 +71,9 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'HomePage': HomePageWidget(),
-      'LoginPage': LoginPageWidget(),
+      'PrivateChats': PrivateChatsWidget(),
+      'Home': HomeWidget(),
+      'MiTingPage': MiTingPageWidget(),
     };
     return Scaffold(
       body: tabs[_currentPage],
@@ -78,17 +81,24 @@ class _NavBarPageState extends State<NavBarPage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home_outlined,
+              Icons.chat_bubble_outline,
               size: 24,
             ),
-            label: 'Home',
+            label: 'Met',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
+            icon: FaIcon(
+              FontAwesomeIcons.medium,
               size: 24,
             ),
-            label: 'login',
+            label: 'MiTMiT',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FontAwesomeIcons.question,
+              size: 24,
+            ),
+            label: 'MiTing',
           )
         ],
         backgroundColor: Colors.white,
@@ -97,7 +107,7 @@ class _NavBarPageState extends State<NavBarPage> {
         unselectedItemColor: Color(0x8A000000),
         onTap: (i) => setState(() => _currentPage = tabs.keys.toList()[i]),
         showSelectedLabels: true,
-        showUnselectedLabels: true,
+        showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
       ),
     );

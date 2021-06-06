@@ -52,6 +52,59 @@ String get currentUserDisplayName => currentUser?.user?.displayName ?? '';
 
 String get currentUserPhoto => currentUser?.user?.photoURL ?? '';
 
+String get currentPhoneNumber => currentUser?.user?.phoneNumber ?? '';
+
+// Set when using phone verification (after phone number is provided).
+String _phoneAuthVerificationCode;
+
+Future beginPhoneAuth({
+  BuildContext context,
+  String phoneNumber,
+  VoidCallback onCodeSent,
+}) async {
+  // If you'd like auto-verification, without the user having to enter the SMS
+  // code manually. Follow these instructions:
+  // * For Android: https://firebase.google.com/docs/auth/android/phone-auth?authuser=0#enable-app-verification (SafetyNet set up)
+  // * For iOS: https://firebase.google.com/docs/auth/ios/phone-auth?authuser=0#start-receiving-silent-notifications
+  // * Finally modify verificationCompleted below as instructed.
+  await FirebaseAuth.instance.verifyPhoneNumber(
+    phoneNumber: phoneNumber,
+    timeout: Duration(seconds: 5),
+    verificationCompleted: (phoneAuthCredential) async {
+      await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+      // If you've implemented auto-verification, navigate to home page or
+      // onboarding page here manually. Uncomment the lines below and replace
+      // DestinationPage() with the desired widget.
+      // await Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (_) => DestinationPage()),
+      // );
+    },
+    verificationFailed: (exception) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error with phone verification: ${exception.message}'),
+      ));
+    },
+    codeSent: (verificationId, _) {
+      _phoneAuthVerificationCode = verificationId;
+      onCodeSent();
+    },
+    codeAutoRetrievalTimeout: (_) {},
+  );
+}
+
+Future verifySmsCode({
+  BuildContext context,
+  String smsCode,
+}) async {
+  final authCredential = PhoneAuthProvider.credential(
+      verificationId: _phoneAuthVerificationCode, smsCode: smsCode);
+  return signInOrCreateAccount(
+    context,
+    () => FirebaseAuth.instance.signInWithCredential(authCredential),
+  );
+}
+
 DocumentReference get currentUserReference => currentUser?.user != null
     ? UsersRecord.collection.doc(currentUser.user.uid)
     : null;

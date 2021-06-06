@@ -1,5 +1,6 @@
 import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../main.dart';
 import '../sign_up/sign_up_widget.dart';
@@ -16,6 +17,7 @@ class LoginPageWidget extends StatefulWidget {
 class _LoginPageWidgetState extends State<LoginPageWidget> {
   TextEditingController emailTextController;
   TextEditingController passwordTextController;
+  bool passwordVisibility;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -23,6 +25,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     super.initState();
     emailTextController = TextEditingController();
     passwordTextController = TextEditingController();
+    passwordVisibility = false;
   }
 
   @override
@@ -125,7 +128,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       ),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Colors.transparent,
+                                          color: Color(0x00000000),
                                           width: 1,
                                         ),
                                         borderRadius: const BorderRadius.only(
@@ -135,7 +138,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Colors.transparent,
+                                          color: Color(0x00000000),
                                           width: 1,
                                         ),
                                         borderRadius: const BorderRadius.only(
@@ -166,7 +169,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextFormField(
                                     controller: passwordTextController,
-                                    obscureText: true,
+                                    obscureText: !passwordVisibility,
                                     decoration: InputDecoration(
                                       hintText: 'Password',
                                       hintStyle: GoogleFonts.getFont(
@@ -176,7 +179,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       ),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Colors.transparent,
+                                          color: Color(0x00000000),
                                           width: 1,
                                         ),
                                         borderRadius: const BorderRadius.only(
@@ -186,12 +189,24 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Colors.transparent,
+                                          color: Color(0x00000000),
                                           width: 1,
                                         ),
                                         borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(4.0),
                                           topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      suffixIcon: InkWell(
+                                        onTap: () => setState(
+                                          () => passwordVisibility =
+                                              !passwordVisibility,
+                                        ),
+                                        child: Icon(
+                                          passwordVisibility
+                                              ? Icons.visibility_outlined
+                                              : Icons.visibility_off_outlined,
+                                          size: 22,
                                         ),
                                       ),
                                     ),
@@ -221,7 +236,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          NavBarPage(initialPage: 'HomePage'),
+                                          NavBarPage(initialPage: 'Home'),
                                     ),
                                   );
                                 },
@@ -347,7 +362,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                                     builder: (context) =>
                                                         NavBarPage(
                                                             initialPage:
-                                                                'HomePage'),
+                                                                'Home'),
                                                   ),
                                                 );
                                               },
