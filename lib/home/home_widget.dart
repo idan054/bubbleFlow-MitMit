@@ -47,7 +47,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   return Padding(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Text(
-                      getJsonField(textFireBaseGetResponse, r'$.[:1].email')
+                      getJsonField(textFireBaseGetResponse, r'$.email')
                           .toString(),
                       style: FlutterFlowTheme.bodyText1.override(
                         fontFamily: 'Poppins',
