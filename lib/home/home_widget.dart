@@ -38,9 +38,10 @@ class _HomeWidgetState extends State<HomeWidget> {
             final listViewFireBaseGetResponse = snapshot.data;
             return Builder(
               builder: (context) {
-                final x = getJsonField(listViewFireBaseGetResponse, r'$.[:]')
-                        ?.toList() ??
-                    [];
+                final x =
+                    getJsonField(listViewFireBaseGetResponse, r'$.[:].uid')
+                            ?.toList() ??
+                        [];
                 return ListView.builder(
                   padding: EdgeInsets.zero,
                   scrollDirection: Axis.vertical,
