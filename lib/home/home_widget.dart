@@ -39,7 +39,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             return Builder(
               builder: (context) {
                 final getListView =
-                    getJsonField(listViewFireBaseGetResponse, r'$[:]')
+                    getJsonField(listViewFireBaseGetResponse, r'$[:].email')
                             ?.toList() ??
                         [];
                 return ListView.builder(
@@ -55,7 +55,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: Text(
-                          getJsonField(getListViewItem, r'$.email').toString(),
+                          getJsonField(getListViewItem, r'$[:].email')
+                              .toString(),
                           style: FlutterFlowTheme.bodyText1.override(
                             fontFamily: 'Poppins',
                           ),
