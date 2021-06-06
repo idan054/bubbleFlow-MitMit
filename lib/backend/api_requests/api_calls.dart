@@ -15,13 +15,10 @@ Future<dynamic> randomUserDataCall({
       returnResponse: true,
     );
 
-Future<dynamic> fireBaseGetCall({
-  String collectionPath = '',
-}) =>
-    ApiManager.instance.makeApiCall(
+Future<dynamic> fireBaseGetCall() => ApiManager.instance.makeApiCall(
       callName: 'FireBase Get',
       apiDomain: 'us-central1-bubbleflow-mitmit.cloudfunctions.net',
-      apiEndpoint: 'GetPost_Collections?collectionPath=$collectionPath',
+      apiEndpoint: 'GetPost_Collections?collectionPath=users',
       callType: ApiCallType.GET,
       headers: {},
       params: {},
