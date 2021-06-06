@@ -21,7 +21,7 @@ Future<dynamic> fireBaseGetCall({
     ApiManager.instance.makeApiCall(
       callName: 'FireBase Get',
       apiDomain: 'us-central1-bubbleflow-mitmit.cloudfunctions.net',
-      apiEndpoint: 'GetPost_Collections?$collectionPath',
+      apiEndpoint: 'GetPost_Collections?collectionPath=$collectionPath',
       callType: ApiCallType.GET,
       headers: {},
       params: {},
